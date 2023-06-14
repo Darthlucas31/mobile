@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Tarefas</title>
+    <link rel="manifest" href="manifest.json" />
+    <script>navigator.serviceWorker.register("service-worker.js")</script> 
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <h1>CRUD Tarefas</h1>
+    <!-- Formulário para adicionar tarefas -->
+    <h2>Adicionar Tarefa</h2>
+
+    <form id="task-form">
+    <input type="text" id="task-input" placeholder="Digite uma tarefa">
+    <button type="submit">Adicionar</button>
+    </form>
+
+    <!-- Lista de tarefas -->
+    <h2>Lista de Tarefas</h2>
+
+    <ul id="task-list"></ul>
+
+    <script>
+    // Array para armazenar as tarefas
+    var tasks = [];
+
+    // Referências aos elementos do DOM
+    var taskForm = document.getElementById('task-form');
+    var taskInput = document.getElementById('task-input');
+    var taskList = document.getElementById('task-list');
+
+    // Função para renderizar a lista de tarefas
+    function renderTaskList() {
+        taskList.innerHTML = '';
+
+        tasks.forEach(function(task, index) {
+            var li = document.createElement('li');
+            li.textContent = task;
+            li.innerHTML += ' <button class="edit-button" onclick="editTask(' + index + ')">Editar</button>';
+            li.innerHTML += ' <button class="delete-button" onclick="deleteTask(' + index + ')">Excluir</button>';
+
+        taskList.appendChild(li);
+        });
+    }
+
+    // Função para adicionar uma tarefa
+    function addTask(event) {
+        event.preventDefault();
+
+        var task = taskInput.value;
+        if (task) {
+            tasks.push(task);
+            taskInput.value = '';
+            renderTaskList();
+        }
+    }
+
+    // Função para editar uma tarefa
+    function editTask(index) {
+        var newTask = prompt('Digite a nova tarefa:', tasks[index]);
+        if (newTask) {
+            tasks[index] = newTask;
+            renderTaskList();
+        }
+    }
+
+    // Função para excluir uma tarefa
+    function deleteTask(index) {
+        tasks.splice(index, 1);
+        renderTaskList();
+    }
+
+    // Event Listener para adicionar tarefa quando o formulário for submetido
+    taskForm.addEventListener('submit', addTask);
+
+    // Renderiza a lista inicial de tarefas
+    renderTaskList();
+</script>
+</body>
+</html>
